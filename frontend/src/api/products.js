@@ -1,5 +1,5 @@
 import API_BASE_URL from "./config";
-
+console.log(API_BASE_URL)
 export async function getProducts() {
   const response = await fetch(
     `${API_BASE_URL}/api/products/`
