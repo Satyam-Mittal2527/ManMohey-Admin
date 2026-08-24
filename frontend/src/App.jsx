@@ -18,6 +18,8 @@ import FilterGroups from "./pages/FilterGroups";
 import FilterOptions from "./pages/FilterOptions";
 import CategoryFilters from "./pages/CategoryFilters";
 import Categories from "./pages/Categories";
+import Customers from "./pages/Customers";
+import CustomerDetails from "./pages/CustomerDetails";
 
 function App() {
 
@@ -46,6 +48,14 @@ function App() {
         <Route
           path="/categories"
           element={<Categories />}
+        />
+        <Route
+          path="/customers"
+          element={<Customers />}
+        />
+        <Route
+          path="/customers/:id"
+          element={<CustomerDetails />}
         />
       </Routes>
     </>

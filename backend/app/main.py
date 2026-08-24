@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from app.routes import products, categories, filter_groups, filter_options
+from app.routes import products, categories, filter_groups, filter_options ,customers
 
 
 app = FastAPI(
@@ -52,6 +52,13 @@ app.include_router(
     prefix="/api/filter-groups",
     tags=["Filter Groups"],
 )
+
+app.include_router(
+    customers.router,
+    prefix="/api/customers",
+    tags=["Customers"],
+)
+
 # ============================================================
 # Static Files
 # ============================================================
