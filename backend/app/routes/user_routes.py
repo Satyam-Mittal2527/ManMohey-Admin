@@ -27,32 +27,36 @@ def get_session(access_token: str | None = Cookie(default=None)):
 
 
 @router.post("/sign-in")
-def sign_in_user(credentials: SignInRequest, response: Response):
-	auth_result = sign_in_service(
-		email=credentials.email,
-		password=credentials.password,
-	)
+def sign_in_user(
+    credentials: SignInRequest,
+    response: Response,
+):
+    auth_result = sign_in_service(
+        email=credentials.email,
+        password=credentials.password,
+    )
 
-	response.set_cookie(
-		key="access_token",
-		value=auth_result["access_token"],
-		max_age=auth_result["expires_in"],
-		httponly=True,
-		samesite="lax",
-		secure=False,
-		path="/",
-	)
-	response.set_cookie(
-		key="refresh_token",
-		value=auth_result["refresh_token"],
-		max_age=60 * 60 * 24 * 30,
-		httponly=True,
-		samesite="lax",
-		secure=False,
-		path="/",
-	)
+    response.set_cookie(
+        key="access_token",
+        value=auth_result["access_token"],
+        max_age=auth_result["expires_in"],
+        httponly=True,
+        samesite="none",
+        secure=True,
+        path="/",
+    )
 
-	return {
-		"message": auth_result["message"],
-		"user": auth_result["user"],
-	}
+    response.set_cookie(
+        key="refresh_token",
+        value=auth_result["refresh_token"],
+        max_age=60 * 60 * 24 * 30,
+        httponly=True,
+        samesite="none",
+        secure=True,
+        path="/",
+    )
+
+    return {
+        "message": auth_result["message"],
+        "user": auth_result["user"],
+    }

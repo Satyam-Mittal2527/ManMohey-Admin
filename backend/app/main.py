@@ -31,18 +31,8 @@ app.add_middleware(
         "https://man-mohey-admin.vercel.app",
     ],
     allow_credentials=True,
-    allow_methods=[
-        "GET",
-        "POST",
-        "PUT",
-        "PATCH",
-        "DELETE",
-        "OPTIONS",
-    ],
-    allow_headers=[
-        "Authorization",
-        "Content-Type",
-    ],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
