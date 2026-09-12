@@ -2,7 +2,7 @@ import API_BASE_URL from './config';
 
 
 export async function signIn(email, password) {
-	const response = await fetch(`${API_BASE_URL}/api/auth/sign-in`, {
+	const response = await fetch(`/api/auth/sign-in`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -24,7 +24,7 @@ export async function signIn(email, password) {
 
 
 export async function getSession() {
-	const response = await fetch(`${API_BASE_URL}/api/auth/session`, {
+	const response = await fetch(`/api/auth/session`, {
 		credentials: 'include',
 	});
 
