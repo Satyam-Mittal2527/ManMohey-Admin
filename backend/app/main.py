@@ -2,7 +2,15 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from app.routes import products, categories, filter_groups, filter_options ,customers
+from app.routes import (
+    products,
+    categories,
+    filter_groups,
+    filter_options,
+    customers,
+    orders,
+    user_routes,
+)
 
 
 app = FastAPI(
@@ -18,7 +26,10 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Restrict this in production
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -57,6 +68,14 @@ app.include_router(
     customers.router,
     prefix="/api/customers",
     tags=["Customers"],
+)
+
+app.include_router(orders.router)
+
+app.include_router(
+    user_routes.router,
+    prefix="/api/auth",
+    tags=["Authentication"],
 )
 
 # ============================================================
