@@ -9,6 +9,10 @@
       "destination": "https://manmohey-admin.onrender.com/api/categories/"
     },
     {
+      "source": "/api/categories/:path*",
+      "destination": "https://manmohey-admin.onrender.com/api/categories/:path*"
+    },
+    {
       "source": "/api/categories/",
       "destination": "https://manmohey-admin.onrender.com/api/categories/"
     },
