@@ -38,7 +38,7 @@ function DashboardCard13() {
               </div>
               <div className="grow flex items-center border-b border-gray-100 dark:border-gray-700/60 text-sm py-2">
                 <div className="grow flex justify-between">
-                  <div className="self-center"><a className="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">Cruip.com</a> Market Ltd 70 Wilson St London</div>
+                  <div className="self-center">Wholesale revenue</div>
                   <div className="shrink-0 self-start ml-2">
                     <span className="font-medium text-green-600">+249.88</span>
                   </div>
@@ -86,7 +86,7 @@ function DashboardCard13() {
               </div>
               <div className="grow flex items-center border-b border-gray-100 dark:border-gray-700/60 text-sm py-2">
                 <div className="grow flex justify-between">
-                  <div className="self-center"><a className="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">App.com</a> Market Ltd 70 Wilson St London</div>
+                  <div className="self-center">Pending settlements</div>
                   <div className="shrink-0 self-start ml-2">
                     <span className="font-medium text-gray-800 dark:text-gray-100 line-through">+$99.99</span>
                   </div>
@@ -102,7 +102,7 @@ function DashboardCard13() {
               </div>
               <div className="grow flex items-center text-sm py-2">
                 <div className="grow flex justify-between">
-                  <div className="self-center"><a className="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">App.com</a> Market Ltd 70 Wilson St London</div>
+                  <div className="self-center">Vendor payouts</div>
                   <div className="shrink-0 self-start ml-2">
                     <span className="font-medium text-gray-800 dark:text-gray-100">-$49.88</span>
                   </div>

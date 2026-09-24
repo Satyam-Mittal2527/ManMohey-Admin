@@ -69,7 +69,7 @@ function Dashboard() {
 
         <Banner />
 
-      <p className='text-center mb-2 text-gray-600 dark:text-gray-400'>All rights reserved &copy; {new Date().getFullYear()} by <a href="https://cruip.com/" target='_blank' className='text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-500 transition-colors'>Cruip</a> • Distributed by <a href="https://themewagon.com/" target='_blank' className='text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-500 transition-colors'>ThemeWagon</a></p>
+      <p className='text-center mb-2 text-gray-600 dark:text-gray-400'>© {new Date().getFullYear()} Manmohey Admin</p>
       </div>
     </div>
   );
