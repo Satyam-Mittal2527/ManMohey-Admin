@@ -1,10 +1,6 @@
-const baseUrl =
-  process.env.NEXT_PUBLIC_BASE_URL ||
-  "http://localhost:8000";
-
 export async function getOrders() {
   const response = await fetch(
-    `${baseUrl}/api/orders/`,
+    `/api/orders/`,
     {
       method: "GET",
     }
@@ -23,7 +19,7 @@ export async function getOrders() {
 
 export async function getOrderById(orderId) {
   const response = await fetch(
-    `${baseUrl}/api/orders/${orderId}`
+    `/api/orders/${orderId}`
   );
 
   const result = await response.json();
@@ -39,7 +35,7 @@ export async function getOrderById(orderId) {
 
 export async function updateOrderStatus(orderId, status) {
   const response = await fetch(
-    `${baseUrl}/api/orders/${orderId}/status`,
+    `/api/orders/${orderId}/status`,
     {
       method: "PATCH",
       headers: {
