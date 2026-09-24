@@ -2,7 +2,7 @@ import API_BASE_URL from "./config";
 
 export async function getProducts() {
   const response = await fetch(
-    `/api/products/`
+    `/api/products`
   );
 
   if (!response.ok) {
