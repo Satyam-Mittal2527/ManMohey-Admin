@@ -7,6 +7,21 @@ import {
     updateOrderStatus,
 } from "../api/orders";
 
+const ORDER_STATUSES = [
+    "PENDING",
+    "CONFIRMED",
+    "SHIPPED",
+    "DELIVERED",
+];
+
+const statusLabels = {
+    PENDING: "Pending",
+    CONFIRMED: "Confirmed",
+    SHIPPED: "Shipped",
+    DELIVERED: "Delivered",
+    CANCELLED: "Cancelled",
+};
+
 export default function OrderDetails() {
     const { id } = useParams();
     const [sidebarOpen, setSidebarOpen] =
@@ -16,6 +31,7 @@ export default function OrderDetails() {
     const [error, setError] = useState("");
     const [selectedStatus, setSelectedStatus] = useState("");
     const [updatingStatus, setUpdatingStatus] = useState(false);
+    const [feedback, setFeedback] = useState(null);
     const handleStatusUpdate = async () => {
         if (!order) return;
 
@@ -32,7 +48,10 @@ export default function OrderDetails() {
                 status: response.data.status,
             }));
 
-            alert("Order status updated successfully");
+            setFeedback({
+                type: "success",
+                message: `Order moved to ${statusLabels[response.data.status] || response.data.status}.`,
+            });
 
         } catch (error) {
             console.error(
@@ -40,10 +59,10 @@ export default function OrderDetails() {
                 error
             );
 
-            alert(
-                error.message ||
-                "Failed to update order status"
-            );
+            setFeedback({
+                type: "error",
+                message: error.message || "Failed to update order status",
+            });
         } finally {
             setUpdatingStatus(false);
         }
@@ -103,6 +122,9 @@ export default function OrderDetails() {
             </div>
         );
     }
+
+    const currentStatusIndex = ORDER_STATUSES.indexOf(order.status);
+    const isCancelled = order.status === "CANCELLED";
 
     return (
         <div className="flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-900">
@@ -191,8 +213,65 @@ export default function OrderDetails() {
                                 </span>
                             </p>
 
+                            {feedback && (
+                                <p
+                                    role="status"
+                                    className={`mt-2 text-sm ${feedback.type === "success"
+                                        ? "text-green-600"
+                                        : "text-red-600"
+                                        }`}
+                                >
+                                    {feedback.message}
+                                </p>
+                            )}
+
                         </div>
 
+                    </div>
+
+                    <div className="mb-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                        <div className="mb-5 flex items-center justify-between gap-4">
+                            <div>
+                                <h2 className="text-lg font-semibold text-gray-900">
+                                    Fulfillment progress
+                                </h2>
+                                <p className="mt-1 text-sm text-gray-500">
+                                    {isCancelled
+                                        ? "This order has been cancelled."
+                                        : `${statusLabels[order.status]} is the current stage.`}
+                                </p>
+                            </div>
+                            <span className="text-sm font-medium text-gray-500">
+                                {isCancelled ? "Stopped" : `${currentStatusIndex + 1} of ${ORDER_STATUSES.length}`}
+                            </span>
+                        </div>
+
+                        <div className="grid gap-4 sm:grid-cols-4">
+                            {ORDER_STATUSES.map((status, index) => {
+                                const isComplete = !isCancelled && index <= currentStatusIndex;
+                                const isCurrent = !isCancelled && status === order.status;
+
+                                return (
+                                    <div key={status} className="relative">
+                                        <div className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-semibold ${isComplete
+                                            ? "bg-violet-600 text-white"
+                                            : "bg-gray-100 text-gray-400"
+                                            }`}>
+                                            {isComplete ? "✓" : index + 1}
+                                        </div>
+                                        {index < ORDER_STATUSES.length - 1 && (
+                                            <div className={`absolute left-9 right-0 top-4 hidden h-0.5 sm:block ${index < currentStatusIndex && !isCancelled
+                                                ? "bg-violet-600"
+                                                : "bg-gray-200"
+                                                }`} />
+                                        )}
+                                        <p className={`mt-2 text-sm font-medium ${isCurrent ? "text-violet-700" : "text-gray-700"}`}>
+                                            {statusLabels[status]}
+                                        </p>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
 
 

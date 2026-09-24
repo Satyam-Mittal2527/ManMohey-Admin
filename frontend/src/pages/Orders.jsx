@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Sidebar from "../partials/Sidebar";
 import Header from "../partials/Header";
@@ -12,6 +12,9 @@ export default function OrdersPage() {
     const [error, setError] = useState("");
     const [sidebarOpen, setSidebarOpen] =
         useState(false);
+    const [search, setSearch] = useState("");
+    const [statusFilter, setStatusFilter] = useState("ALL");
+    const [refreshing, setRefreshing] = useState(false);
     const getStatusStyle = (status) => {
         switch (status) {
             case "PENDING":
@@ -34,24 +37,53 @@ export default function OrdersPage() {
         }
     };
 
-    useEffect(() => {
-        const loadOrders = async () => {
-            try {
+    const loadOrders = async (isRefresh = false) => {
+        try {
+            if (isRefresh) {
+                setRefreshing(true);
+            } else {
                 setLoading(true);
-
-                const response = await getOrders();
-
-                setOrders(response.data || []);
-            } catch (error) {
-                console.error("Failed to fetch orders:", error);
-                setError(error.message || "Failed to load orders");
-            } finally {
-                setLoading(false);
             }
-        };
 
+            const response = await getOrders();
+
+            setOrders(response.data || []);
+            setError("");
+        } catch (error) {
+            console.error("Failed to fetch orders:", error);
+            setError(error.message || "Failed to load orders");
+        } finally {
+            setLoading(false);
+            setRefreshing(false);
+        }
+    };
+
+    useEffect(() => {
         loadOrders();
     }, []);
+
+    const filteredOrders = useMemo(() => {
+        const query = search.trim().toLowerCase();
+
+        return orders.filter((order) => {
+            const matchesStatus =
+                statusFilter === "ALL" || order.status === statusFilter;
+            const matchesSearch = !query || [
+                order.order_number,
+                order.full_name,
+                order.phone_number,
+            ].some((value) =>
+                String(value || "").toLowerCase().includes(query)
+            );
+
+            return matchesStatus && matchesSearch;
+        });
+    }, [orders, search, statusFilter]);
+
+    const statusCounts = orders.reduce((counts, order) => {
+        counts[order.status] = (counts[order.status] || 0) + 1;
+        return counts;
+    }, {});
 
     if (loading) {
         return (
@@ -69,6 +101,13 @@ export default function OrdersPage() {
                 <div className="rounded-lg bg-red-50 p-4 text-red-600">
                     {error}
                 </div>
+                <button
+                    type="button"
+                    onClick={() => loadOrders()}
+                    className="mt-4 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700"
+                >
+                    Try again
+                </button>
             </div>
         );
     }
@@ -88,14 +127,76 @@ export default function OrdersPage() {
 
                 <div className="p-6">
 
-                    <div className="mb-6">
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                            Orders
-                        </h1>
+                    <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+                        <div>
+                            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                                Orders
+                            </h1>
 
-                        <p className="mt-1 text-sm text-gray-500">
-                            Manage customer orders and payments.
-                        </p>
+                            <p className="mt-1 text-sm text-gray-500">
+                                Track fulfillment progress and customer payments.
+                            </p>
+                        </div>
+
+                        <button
+                            type="button"
+                            onClick={() => loadOrders(true)}
+                            disabled={refreshing}
+                            className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                            {refreshing ? "Refreshing..." : "Refresh orders"}
+                        </button>
+                    </div>
+
+                    <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+                        {["ALL", "PENDING", "CONFIRMED", "SHIPPED", "DELIVERED", "CANCELLED"].map((status) => (
+                            <button
+                                key={status}
+                                type="button"
+                                onClick={() => setStatusFilter(status)}
+                                className={`rounded-lg border p-3 text-left transition ${statusFilter === status
+                                    ? "border-violet-300 bg-violet-50"
+                                    : "border-gray-200 bg-white hover:border-violet-200"
+                                    }`}
+                            >
+                                <p className="text-xs font-semibold uppercase text-gray-500">
+                                    {status === "ALL" ? "All orders" : status}
+                                </p>
+                                <p className="mt-1 text-xl font-semibold text-gray-900">
+                                    {status === "ALL" ? orders.length : statusCounts[status] || 0}
+                                </p>
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="mb-4 flex flex-col gap-3 sm:flex-row">
+                        <label className="flex-1">
+                            <span className="sr-only">Search orders</span>
+                            <input
+                                type="search"
+                                value={search}
+                                onChange={(event) => setSearch(event.target.value)}
+                                placeholder="Search by order number, customer, or phone"
+                                className="w-full rounded-lg border-gray-300 bg-white text-sm shadow-sm focus:border-violet-500 focus:ring-violet-500"
+                            />
+                        </label>
+                        <select
+                            value={statusFilter}
+                            onChange={(event) => setStatusFilter(event.target.value)}
+                            className="rounded-lg border-gray-300 bg-white text-sm shadow-sm focus:border-violet-500 focus:ring-violet-500"
+                            aria-label="Filter orders by status"
+                        >
+                            <option value="ALL">All statuses</option>
+                            <option value="PENDING">Pending</option>
+                            <option value="CONFIRMED">Confirmed</option>
+                            <option value="SHIPPED">Shipped</option>
+                            <option value="DELIVERED">Delivered</option>
+                            <option value="CANCELLED">Cancelled</option>
+                        </select>
+                    </div>
+
+                    <div className="mb-3 text-sm text-gray-500">
+                        Showing {filteredOrders.length} of {orders.length} orders
                     </div>
 
                     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
@@ -140,7 +241,7 @@ export default function OrdersPage() {
 
                                 <tbody className="divide-y divide-gray-100">
 
-                                    {orders.map((order) => (
+                                    {filteredOrders.map((order) => (
 
                                         <tr
                                             key={order.id}
@@ -205,7 +306,7 @@ export default function OrdersPage() {
                                                     to={`/orders/${order.id}`}
                                                     className="font-medium text-violet-600 hover:text-violet-700"
                                                 >
-                                                    View
+                                                    Track order
                                                 </Link>
 
                                             </td>
@@ -220,9 +321,9 @@ export default function OrdersPage() {
 
                         </div>
 
-                        {orders.length === 0 && (
+                        {filteredOrders.length === 0 && (
                             <div className="p-10 text-center text-gray-500">
-                                No orders found.
+                                No orders match the current search or filter.
                             </div>
                         )}
 
