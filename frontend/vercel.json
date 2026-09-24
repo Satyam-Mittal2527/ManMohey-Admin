@@ -35,6 +35,18 @@
     {
       "source": "/api/orders/:path*",
       "destination": "https://manmohey-admin.onrender.com/api/orders/:path*"
+    },
+    {
+      "source": "/api/customers",
+      "destination": "https://manmohey-admin.onrender.com/api/customers/"
+    },
+    {
+      "source": "/api/customers/",
+      "destination": "https://manmohey-admin.onrender.com/api/customers/"
+    },
+    {
+      "source": "/api/customers/:path*",
+      "destination": "https://manmohey-admin.onrender.com/api/customers/:path*"
     }
   ]
 }
