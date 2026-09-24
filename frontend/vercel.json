@@ -1,8 +1,20 @@
 {
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "destination": "https://manmohey-admin.onrender.com/api/:path*"
+      "source": "/api/categories",
+      "destination": "https://manmohey-admin.onrender.com/api/categories/"
+    },
+    {
+      "source": "/api/categories/",
+      "destination": "https://manmohey-admin.onrender.com/api/categories/"
+    },
+    {
+      "source": "/api/products",
+      "destination": "https://manmohey-admin.onrender.com/api/products/"
+    },
+    {
+      "source": "/api/products/",
+      "destination": "https://manmohey-admin.onrender.com/api/products/"
     }
   ]
 }
