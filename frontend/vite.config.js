@@ -13,22 +13,22 @@ export default defineConfig({
       transformMixedEsModules: true,
     }
   },
-  // server: {
-  //   proxy: {
-  //     "/api": {
-  //       target: "http://127.0.0.1:8000",
-  //       changeOrigin: true,
-  //       secure: true,
-  //     },
-  //   },
-  // }, 
   server: {
     proxy: {
       "/api": {
-        target: "https://manmohey-admin.onrender.com",
+        target: "http://127.0.0.1:8000",
         changeOrigin: true,
         secure: true,
       },
     },
-  },
+  }, 
+  // server: {
+  //   proxy: {
+  //     "/api": {
+  //       target: "https://manmohey-admin.onrender.com",
+  //       changeOrigin: true,
+  //       secure: true,
+  //     },
+  //   },
+  // },
 })
