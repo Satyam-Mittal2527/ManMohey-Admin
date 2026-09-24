@@ -47,6 +47,10 @@
     {
       "source": "/api/customers/:path*",
       "destination": "https://manmohey-admin.onrender.com/api/customers/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
