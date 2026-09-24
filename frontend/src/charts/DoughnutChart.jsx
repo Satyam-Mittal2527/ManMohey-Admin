@@ -3,11 +3,11 @@ import { useThemeProvider } from '../utils/ThemeContext';
 
 import { chartColors } from './ChartjsConfig';
 import {
-  Chart, DoughnutController, ArcElement, TimeScale, Tooltip,
+  Chart, DoughnutController, ArcElement, TimeScale, Tooltip, Legend,
 } from 'chart.js';
 import 'chartjs-adapter-moment';
 
-Chart.register(DoughnutController, ArcElement, TimeScale, Tooltip);
+Chart.register(DoughnutController, ArcElement, TimeScale, Tooltip, Legend);
 
 function DoughnutChart({
   data,

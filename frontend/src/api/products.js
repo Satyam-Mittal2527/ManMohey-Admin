@@ -1,8 +1,8 @@
 import API_BASE_URL from "./config";
-console.log(API_BASE_URL)
+
 export async function getProducts() {
   const response = await fetch(
-    `${API_BASE_URL}/api/products/`
+    `/api/products/`
   );
 
   if (!response.ok) {
@@ -24,7 +24,7 @@ export async function getProducts() {
 
 export const createProduct = async (payload) => {
     const response = await fetch(
-        `${API_BASE_URL}/api/products/`,
+        `/api/products/`,
         {
             method: "POST",
             headers: {
@@ -60,7 +60,7 @@ export const uploadProductImages = async (
     });
 
     const response = await fetch(
-        `${API_BASE_URL}/api/products/${productId}/images`,
+        `/api/products/${productId}/images`,
         {
             method: "POST",
             body: formData,
@@ -81,7 +81,7 @@ export const uploadProductImages = async (
 
 export const getProductById = async (productId) => {
     const response = await fetch(
-        `${API_BASE_URL}/api/products/${productId}`
+        `/api/products/${productId}`
     );
 
     const data = await response.json();
@@ -100,7 +100,7 @@ export const deleteProductImage = async (
     imageId
 ) => {
     const response = await fetch(
-        `${API_BASE_URL}/api/products/${productId}/images/${imageId}`,
+        `/api/products/${productId}/images/${imageId}`,
         {
             method: "DELETE",
         }
@@ -120,7 +120,7 @@ export const deleteProductImage = async (
 
 export const deleteProduct = async (productId) => {
     const response = await fetch(
-        `${API_BASE_URL}/api/products/${productId}`,
+        `/api/products/${productId}`,
         {
             method: "DELETE",
         }
@@ -139,7 +139,7 @@ export const deleteProduct = async (productId) => {
 
 export const getDeletedProducts = async () => {
     const response = await fetch(
-        `${API_BASE_URL}/api/products/deleted`
+        `/api/products/deleted`
     );
 
     const data = await response.json();
@@ -159,7 +159,7 @@ export const restoreProduct = async (
     productId
 ) => {
     const response = await fetch(
-        `${API_BASE_URL}/api/products/${productId}/restore`,
+        `/api/products/${productId}/restore`,
         {
             method: "PATCH",
         }

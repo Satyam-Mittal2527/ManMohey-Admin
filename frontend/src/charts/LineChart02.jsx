@@ -15,18 +15,22 @@ Chart.register(LineController, LineElement, Filler, PointElement, LinearScale, T
 function LineChart02({
   data,
   width,
-  height
+  height,
+  summary = '$1,482',
+  change = '-22%',
+  changeTone = 'negative',
 }) {
 
   const [chart, setChart] = useState(null)
   const canvas = useRef(null);
-  const legend = useRef(null);
   const { currentTheme } = useThemeProvider();
   const darkMode = currentTheme === 'dark';
   const { textColor, gridColor, tooltipBodyColor, tooltipBgColor, tooltipBorderColor } = chartColors;  
 
   useEffect(() => {
     const ctx = canvas.current;
+    if (!ctx) return undefined;
+    Chart.getChart(ctx)?.destroy();
     // eslint-disable-next-line no-unused-vars
     const newChart = new Chart(ctx, {
       type: 'line',
@@ -93,54 +97,6 @@ function LineChart02({
         maintainAspectRatio: false,
         resizeDelay: 200,
       },
-      plugins: [
-        {
-          id: 'htmlLegend',
-          afterUpdate(c, args, options) {
-            const ul = legend.current;
-            if (!ul) return;
-            // Remove old legend items
-            while (ul.firstChild) {
-              ul.firstChild.remove();
-            }
-            // Reuse the built-in legendItems generator
-            const items = c.options.plugins.legend.labels.generateLabels(c);
-            items.slice(0, 2).forEach((item) => {
-              const li = document.createElement('li');
-              // Button element
-              const button = document.createElement('button');
-              button.style.display = 'inline-flex';
-              button.style.alignItems = 'center';
-              button.style.opacity = item.hidden ? '.3' : '';
-              button.onclick = () => {
-                c.setDatasetVisibility(item.datasetIndex, !c.isDatasetVisible(item.datasetIndex));
-                c.update();
-              };
-              // Color box
-              const box = document.createElement('span');
-              box.style.display = 'block';
-              box.style.width = '12px';
-              box.style.height = '12px';
-              box.style.borderRadius = 'calc(infinity * 1px)';
-              box.style.marginRight = '8px';
-              box.style.borderWidth = '3px';
-              box.style.borderColor = c.data.datasets[item.datasetIndex].borderColor;
-              box.style.pointerEvents = 'none';
-              // Label
-              const label = document.createElement('span');
-              label.classList.add('text-gray-500', 'dark:text-gray-400');
-              label.style.fontSize = '14px';
-              label.style.lineHeight = 'calc(1.25 / 0.875)';
-              const labelText = document.createTextNode(item.text);
-              label.appendChild(labelText);
-              li.appendChild(button);
-              button.appendChild(box);
-              button.appendChild(label);
-              ul.appendChild(li);
-            });
-          },
-        },
-      ],
     });
     setChart(newChart);
     return () => newChart.destroy();
@@ -173,11 +129,8 @@ function LineChart02({
       <div className="px-5 py-3">
         <div className="flex flex-wrap justify-between items-end gap-y-2 gap-x-4">
           <div className="flex items-start">
-            <div className="text-3xl font-bold text-gray-800 dark:text-gray-100 mr-2">$1,482</div>
-            <div className="text-sm font-medium text-red-700 px-1.5 bg-red-500/20 rounded-full">-22%</div>
-          </div>
-          <div className="grow mb-1">
-            <ul ref={legend} className="flex flex-wrap gap-x-4 sm:justify-end"></ul>
+            <div className="text-3xl font-bold text-gray-800 dark:text-gray-100 mr-2">{summary}</div>
+            <div className={`text-sm font-medium px-1.5 rounded-full ${changeTone === 'positive' ? 'text-green-700 bg-green-500/20' : 'text-red-700 bg-red-500/20'}`}>{change}</div>
           </div>
         </div>
       </div>
