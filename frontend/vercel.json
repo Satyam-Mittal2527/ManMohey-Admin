@@ -49,6 +49,18 @@
       "destination": "https://manmohey-admin.onrender.com/api/customers/:path*"
     },
     {
+      "source": "/api/filter-groups",
+      "destination": "https://manmohey-admin.onrender.com/api/filter-groups/"
+    },
+    {
+      "source": "/api/filter-groups/",
+      "destination": "https://manmohey-admin.onrender.com/api/filter-groups/"
+    },
+    {
+      "source": "/api/filter-groups/:path*",
+      "destination": "https://manmohey-admin.onrender.com/api/filter-groups/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
