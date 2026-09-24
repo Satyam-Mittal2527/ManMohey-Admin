@@ -65,6 +65,10 @@
       "destination": "https://manmohey-admin.onrender.com/api/filter-groups/:path*"
     },
     {
+      "source": "/api/filter-options/group/:groupId",
+      "destination": "https://manmohey-admin.onrender.com/api/filter-options/group/:groupId"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
